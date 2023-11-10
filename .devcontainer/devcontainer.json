@@ -19,6 +19,7 @@
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
 		"ghcr.io/cirolosapio/devcontainers-features/alpine-git:0": {},
+		"ghcr.io/cirolosapio/devcontainers-features/alpine-openssh:0": {},
 		"ghcr.io/cirolosapio/devcontainers-features/alpine-ohmyzsh:0": {}
 	},
 	"customizations": {
@@ -28,7 +29,6 @@
 				"eamodio.gitlens",
 				"esbenp.prettier-vscode",
 				"github.vscode-github-actions",
-				"ms-pyright.pyright",
 				"ms-python.black-formatter",
 				"ms-python.flake8",
 				"ms-python.isort",
