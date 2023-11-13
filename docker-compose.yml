@@ -22,7 +22,7 @@ services:
       - DB_PASS=changeme
     depends_on:
       - db
-  
+
   client:
     build:
       context: .
