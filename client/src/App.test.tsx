@@ -17,12 +17,12 @@ jest.mock('./app/recipes', () => ({
 
 
 const setCurrentUser = (user: { email: string, token: string } | null) => {
-  useAuthentication.mockReturnValue([
+  (useAuthentication as jest.Mock).mockReturnValue([
     user,
     jest.fn(),
     jest.fn(),
   ]);
-  useAuthenticatedUser.mockReturnValue(user);
+  (useAuthenticatedUser as jest.Mock).mockReturnValue(user);
 }
 
 test('Shows auth form when user is not authenticated', () => {
@@ -39,8 +39,8 @@ test('Shows auth form when user is not authenticated', () => {
 test('Recipe path loads and displays expected recipe', () => {
   const recipe = createRecipe({ id: '123', name: 'a test recipe' });
 
-  setCurrentUser({ email: 'test@example.com', token: '1234' })
-  useRecipe.mockReturnValue(recipe);
+  setCurrentUser({ email: 'test@example.com', token: '1234' });
+  (useRecipe as jest.Mock).mockReturnValue(recipe);
 
   render(
     <MemoryRouter initialEntries={["/recipes/123"]}>
