@@ -6,7 +6,7 @@ const Label = styled.label``
 const Button = styled.button``
 
 type Props = {
-    onSubmit: (email: String, password: String) => void,
+    onSubmit: (email: string, password: string) => void,
 }
 
 const AuthForm = ({ onSubmit }: Props) => {

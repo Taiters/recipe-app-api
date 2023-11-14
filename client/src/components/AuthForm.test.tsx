@@ -9,6 +9,7 @@ test('onSubmit recieves email and password entered on form', async () => {
     const onSubmit = jest.fn()
 
     render(<AuthForm onSubmit={onSubmit} />)
+
     const emailInput = screen.getByLabelText('Email')
     const passwordInput = screen.getByLabelText('Password')
     const submitButton = screen.getByTestId('submit');
