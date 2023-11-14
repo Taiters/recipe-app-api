@@ -1,21 +1,35 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { AuthContext, useAuthentication } from "./app/auth";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { AuthContext, useAuthenticatedUser, useAuthentication } from "./app/auth";
 import AuthForm from "./components/AuthForm";
+import Navigation from "./components/Navigation";
+
+const LOGIN_PATH = "/login";
+
+const PrivateRoute = ({ children, ...rest }: React.ComponentProps<typeof Route>) => {
+  const currentUser = useAuthenticatedUser();
+  return (
+    <Route {...rest}>
+      {currentUser ? children : <Redirect to={LOGIN_PATH} />}
+    </Route>
+  );
+}
 
 const App = () => {
-  const [currentUser, login] = useAuthentication();
+  const [currentUser, login, logout] = useAuthentication();
 
-  console.log(currentUser);
   return (
     <AuthContext.Provider value={currentUser}>
+      <Navigation onLogout={logout} />
       <Switch>
-        <Route path="/">
-
+        <Route path={LOGIN_PATH}>
+          {currentUser == null
+            ? <AuthForm onSubmit={login} />
+            : <Redirect to="/" />
+          }
         </Route>
-        <Route path="/login">
-          <AuthForm onSubmit={login} />
-        </Route>
+        <PrivateRoute path="/">
+          <p>Works</p>
+        </PrivateRoute>
       </Switch>
     </AuthContext.Provider>
   );

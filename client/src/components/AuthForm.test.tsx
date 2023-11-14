@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import React from "react";
 import AuthForm from "./AuthForm";
 
 test('onSubmit recieves email and password entered on form', async () => {

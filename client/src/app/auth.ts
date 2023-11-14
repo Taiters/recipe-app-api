@@ -27,8 +27,8 @@ const loadToken = async (email: string, password: string): Promise<string> => {
             },
         }
     );
-    const result = await response.json();
-    return result['token'];
+    const tokenData = await response.json();
+    return tokenData['token'];
 }
 
 const loadUser = async (token: string): Promise<User> => {
@@ -41,14 +41,15 @@ const loadUser = async (token: string): Promise<User> => {
             }
         }
     )
+    const user = await result.json();
     return {
-        email: result['email'],
+        email: user['email'],
         token: token,
     }
 }
 
 const useAuthentication = (): [
-    User | null, 
+    User | null,
     (email: string, password: string) => Promise<void>,
     () => void,
 ] => {

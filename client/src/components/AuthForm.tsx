@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
+const Form = styled.form``
 const Input = styled.input``
 const Label = styled.label``
 const Button = styled.button``
@@ -13,13 +14,13 @@ const AuthForm = ({ onSubmit }: Props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         onSubmit(email, password);
         e.preventDefault();
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} data-testid="auth-form">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
 
@@ -27,7 +28,7 @@ const AuthForm = ({ onSubmit }: Props) => {
             <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
 
             <Button type="submit" data-testid="submit">Log In</Button>
-        </form>
+        </Form>
     );
 }
 
