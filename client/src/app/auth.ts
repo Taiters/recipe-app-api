@@ -5,6 +5,8 @@
 import { createContext, useContext, useState } from "react";
 import RecipeAPI from "./api";
 
+const STORAGE_KEY = 'authedUser';
+
 type AuthedUser = {
     email: string,
     token: string,
@@ -19,19 +21,33 @@ const useAuthentication = (): [
     (email: string, password: string) => Promise<void>,
     () => void,
 ] => {
-    const [currentUser, setCurrentUser] = useState<AuthedUser | null>(null);
+    const [currentUser, setCurrentUser] = useState<AuthedUser | null>(() => {
+        const storedUser = window.sessionStorage.getItem(STORAGE_KEY);
+        if (storedUser == null) {
+            return null;
+        }
+
+        return JSON.parse(storedUser);
+    });
 
     const login = async (email: string, password: string) => {
         const token = await RecipeAPI.token(email, password);
         const user = await (new RecipeAPI(token)).me();
 
-        setCurrentUser({
+        const authedUser = {
             email: user.email,
             token,
-        });
+        };
+
+        window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(authedUser));
+
+        setCurrentUser(authedUser);
     }
 
-    const logout = () => setCurrentUser(null);
+    const logout = () => {
+        window.sessionStorage.removeItem(STORAGE_KEY);
+        setCurrentUser(null);
+    }
 
     return [currentUser, login, logout];
 }
