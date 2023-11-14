@@ -1,6 +1,6 @@
-import { Recipe as RecipeModel } from './app/models';
+import { RecipeDetail } from "./app/models";
 
-const createRecipe = (recipe: Partial<RecipeModel> = {}): RecipeModel => {
+const createRecipe = (recipe: Partial<RecipeDetail> = {}): RecipeDetail => {
     return {
         id: '12',
         image: null,

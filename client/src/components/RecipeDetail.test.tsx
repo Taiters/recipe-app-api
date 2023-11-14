@@ -1,11 +1,11 @@
 
 import { render, screen } from "@testing-library/react";
-import { createRecipe } from "../test-utils";
-import Recipe from "./Recipe";
+import { createRecipe } from "../testUtils";
+import RecipeDetail from "./RecipeDetail";
 
 test('Shows relevant recipe information', async () => {
     const recipe = createRecipe();
-    render(<Recipe recipe={recipe} />);
+    render(<RecipeDetail recipe={recipe} />);
 
     const tagsList = screen.getByTestId('tags');
     const ingredientsList = screen.getByTestId('ingredients');
@@ -29,7 +29,7 @@ test('Shows image when available', async () => {
         image: 'http://example.com/the-image-url.jpg',
     });
 
-    render(<Recipe recipe={recipe} />);
+    render(<RecipeDetail recipe={recipe} />);
 
     expect(screen.getByTestId("image")).toHaveAttribute('src', recipe.image);
 });
@@ -39,7 +39,7 @@ test('Omits tags list where there is none', () => {
         tags: [],
     });
 
-    render(<Recipe recipe={recipe} />);
+    render(<RecipeDetail recipe={recipe} />);
 
     expect(screen.queryByTestId("tags")).not.toBeInTheDocument();
 });
@@ -49,7 +49,7 @@ test('Omits ingredients list where there is none', () => {
         ingredients: [],
     });
 
-    render(<Recipe recipe={recipe} />);
+    render(<RecipeDetail recipe={recipe} />);
 
     expect(screen.queryByTestId("ingredients")).not.toBeInTheDocument();
 });

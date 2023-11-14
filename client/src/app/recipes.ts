@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import RecipeAPI from "./api";
 import { useAuthenticatedUser } from "./auth";
-import { Recipe as RecipeModel } from "./models";
+import { RecipeDetail } from "./models";
 
-const useRecipe = (id: string): RecipeModel | null => {
+const useRecipe = (id: string): RecipeDetail | null => {
     const currentUser = useAuthenticatedUser();
 
     if (currentUser == null) {
         throw new Error("useRecipe requires an authenticated user");
     }
 
-    const [recipe, setRecipe] = useState<RecipeModel | null>(null);
+    const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
     const api = useMemo(() => new RecipeAPI(currentUser.token), [currentUser.token]);
 
     useEffect(() => {

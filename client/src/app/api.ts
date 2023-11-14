@@ -1,4 +1,4 @@
-import { Recipe, User } from "./models";
+import { RecipeDetail, User } from "./models";
 
 class RecipeAPI {
     token: string;
@@ -30,14 +30,14 @@ class RecipeAPI {
         return await response.json() as User;
     }
 
-    async recipes(): Promise<Recipe[]> {
+    async recipes(): Promise<RecipeDetail[]> {
         const response = await this.request("/api/recipe/recipes/");
-        return await response.json() as Recipe[];
+        return await response.json() as RecipeDetail[];
     }
 
-    async recipe(id: string): Promise<Recipe> {
+    async recipe(id: string): Promise<RecipeDetail> {
         const response = await this.request(`/api/recipe/recipes/${id}/`)
-        return await response.json() as Recipe;
+        return await response.json() as RecipeDetail;
     }
 
     static async token(email: string, password: string): Promise<string> {

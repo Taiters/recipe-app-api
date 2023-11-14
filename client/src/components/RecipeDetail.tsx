@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Recipe as RecipeModel } from "../app/models";
+import { RecipeDetail as RecipeDetailModel } from "../app/models";
 
 const Container = styled.div``
 const Name = styled.h2``
@@ -8,9 +8,9 @@ const Description = styled.p``
 const Info = styled.p``
 
 type Props = {
-    recipe: RecipeModel,
+    recipe: RecipeDetailModel,
 }
-const Recipe = ({ recipe }: Props) => (
+const RecipeDetail = ({ recipe }: Props) => (
     <Container data-testid={`recipe-${recipe.id}`}>
         <Name data-testid="name">{recipe.name}</Name>
         {recipe.image && <Image data-testid="image" src={recipe.image} alt={recipe.name} />}
@@ -37,4 +37,4 @@ const Recipe = ({ recipe }: Props) => (
     </Container>
 )
 
-export default Recipe;
+export default RecipeDetail;

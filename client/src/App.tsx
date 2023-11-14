@@ -2,7 +2,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { AuthContext, useAuthenticatedUser, useAuthentication } from "./app/auth";
 import AuthForm from "./components/AuthForm";
 import Navigation from "./components/Navigation";
-import RecipeView from "./components/RecipeView";
+import RecipeDetailView from "./components/RecipeDetailView";
 
 const LOGIN_PATH = "/login";
 
@@ -29,7 +29,7 @@ const App = () => {
           }
         </Route>
         <PrivateRoute path="/recipes/:id">
-          <RecipeView />
+          <RecipeDetailView />
         </PrivateRoute>
         <PrivateRoute path="/">
         </PrivateRoute>

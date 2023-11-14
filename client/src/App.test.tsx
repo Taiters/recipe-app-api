@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 import { useAuthenticatedUser, useAuthentication } from './app/auth';
 import { useRecipe } from './app/recipes';
-import { createRecipe } from './test-utils';
+import { createRecipe } from './testUtils';
 
 jest.mock('./app/auth', () => ({
   useAuthentication: jest.fn(),

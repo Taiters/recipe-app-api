@@ -9,7 +9,7 @@ export type RecipeAttribute = {
 export type Ingredient = RecipeAttribute;
 export type Tag = RecipeAttribute;
 
-export type Recipe = {
+export type RecipeDetail = {
     id: string,
     name: string,
     description: string,
