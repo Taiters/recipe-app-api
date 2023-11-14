@@ -1,6 +1,4 @@
-type User = {
-    email: string,
-}
+import { Recipe, User } from "./models";
 
 class RecipeAPI {
     token: string;
@@ -29,10 +27,17 @@ class RecipeAPI {
 
     async me(): Promise<User> {
         const response = await this.request("/api/user/me/");
-        const data = await response.json()
-        return {
-            email: data['email'],
-        };
+        return await response.json() as User;
+    }
+
+    async recipes(): Promise<Recipe[]> {
+        const response = await this.request("/api/recipe/recipes/");
+        return await response.json() as Recipe[];
+    }
+
+    async recipe(id: string): Promise<Recipe> {
+        const response = await this.request(`/api/recipe/recipes/${id}/`)
+        return await response.json() as Recipe;
     }
 
     static async token(email: string, password: string): Promise<string> {
