@@ -28,7 +28,7 @@ const App = () => {
           }
         </Route>
         <PrivateRoute path="/">
-          <p>Works</p>
+          <p>Works!</p>
         </PrivateRoute>
       </Switch>
     </AuthContext.Provider>
