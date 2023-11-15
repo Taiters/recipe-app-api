@@ -27,6 +27,7 @@ const Button = styled.button`
   display: block;
   width: 100%;
   padding: 0;
+  margin: 1em 0;
 `;
 
 const Fieldset = styled.fieldset`
