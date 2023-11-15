@@ -3,9 +3,9 @@ import { AuthContext, useAuthenticatedUser, useAuthentication } from "./app/auth
 import AuthForm from "./components/AuthForm";
 import Navigation from "./components/Navigation";
 import RecipeCreateController from "./components/RecipeCreateController";
-import RecipeDetailView from "./components/RecipeDetailView";
+import RecipeDetailController from "./components/RecipeDetailController";
 import RecipeEditController from "./components/RecipeEditController";
-import RecipeListView from "./components/RecipeListView";
+import RecipeListController from "./components/RecipeListController";
 
 const LOGIN_PATH = "/login";
 
@@ -38,10 +38,10 @@ const App = () => {
           <RecipeEditController />
         </PrivateRoute>
         <PrivateRoute path="/recipes/:id">
-          <RecipeDetailView />
+          <RecipeDetailController />
         </PrivateRoute>
         <PrivateRoute path="/">
-          <RecipeListView />
+          <RecipeListController />
         </PrivateRoute>
       </Switch>
     </AuthContext.Provider>
