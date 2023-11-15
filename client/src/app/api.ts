@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import { useAuthenticatedUser } from "./auth";
 import { Recipe, RecipeDetail, User } from "./models";
 
+const RECIPE_BASE_URL = "/api/recipe/recipes/";
+
 export type RecipeFormData =
     Pick<RecipeDetail, 'title' | 'description' | 'time_minutes' | 'price' | 'ingredients' | 'tags'>;
 
@@ -36,18 +38,18 @@ class RecipeAPI {
     }
 
     async recipes(): Promise<Recipe[]> {
-        const response = await this.request("/api/recipe/recipes/");
+        const response = await this.request(RECIPE_BASE_URL);
         return await response.json() as Recipe[];
     }
 
     async recipe(id: string): Promise<RecipeDetail> {
-        const response = await this.request(`/api/recipe/recipes/${id}/`)
+        const response = await this.request(`${RECIPE_BASE_URL}${id}/`)
         return await response.json() as RecipeDetail;
     }
 
     async createRecipe(recipe: RecipeFormData): Promise<RecipeDetail> {
         const response = await this.request(
-            '/api/recipe/recipes/',
+            RECIPE_BASE_URL,
             'POST',
             JSON.stringify(recipe)
         );
@@ -56,7 +58,7 @@ class RecipeAPI {
 
     async updateRecipe(id: string, recipe: RecipeFormData): Promise<RecipeDetail> {
         const response = await this.request(
-            `/api/recipe/recipes/${id}/`,
+            `${RECIPE_BASE_URL}${id}/`,
             'PUT',
             JSON.stringify({
                 ...recipe,
@@ -64,6 +66,13 @@ class RecipeAPI {
             }),
         );
         return await response.json() as RecipeDetail;
+    }
+
+    async deleteRecipe(id: string) {
+        await this.request(
+            `${RECIPE_BASE_URL}${id}/`,
+            'DELETE'
+        );
     }
 
     static async token(email: string, password: string): Promise<string> {

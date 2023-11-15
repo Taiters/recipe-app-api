@@ -1,11 +1,17 @@
 
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import { createRecipe } from "../testUtils";
 import RecipeDetail from "./RecipeDetail";
 
 test('Shows relevant recipe information', async () => {
     const recipe = createRecipe();
-    render(<RecipeDetail recipe={recipe} />);
+    render(
+        <MemoryRouter>
+            <RecipeDetail recipe={recipe} onDelete={jest.fn()} />
+        </MemoryRouter>
+    );
 
     const tagsList = screen.getByTestId('tags');
     const ingredientsList = screen.getByTestId('ingredients');
@@ -29,7 +35,11 @@ test('Shows image when available', async () => {
         image: 'http://example.com/the-image-url.jpg',
     });
 
-    render(<RecipeDetail recipe={recipe} />);
+    render(
+        <MemoryRouter>
+            <RecipeDetail recipe={recipe} onDelete={jest.fn()} />
+        </MemoryRouter>
+    );
 
     expect(screen.getByTestId("image")).toHaveAttribute('src', recipe.image);
 });
@@ -39,7 +49,11 @@ test('Omits tags list where there is none', () => {
         tags: [],
     });
 
-    render(<RecipeDetail recipe={recipe} />);
+    render(
+        <MemoryRouter>
+            <RecipeDetail recipe={recipe} onDelete={jest.fn()} />
+        </MemoryRouter>
+    );
 
     expect(screen.queryByTestId("tags")).not.toBeInTheDocument();
 });
@@ -49,7 +63,28 @@ test('Omits ingredients list where there is none', () => {
         ingredients: [],
     });
 
-    render(<RecipeDetail recipe={recipe} />);
+    render(
+        <MemoryRouter>
+            <RecipeDetail recipe={recipe} onDelete={jest.fn()} />
+        </MemoryRouter>
+    );
 
     expect(screen.queryByTestId("ingredients")).not.toBeInTheDocument();
+});
+
+
+test('Clicking delete button triggers the onDelete callback', async () => {
+    const user = userEvent.setup();
+    const recipe = createRecipe();
+    const onDelete = jest.fn();
+
+    render(
+        <MemoryRouter>
+            <RecipeDetail recipe={recipe} onDelete={onDelete} />
+        </MemoryRouter>
+    );
+
+    await user.click(screen.getByTestId("delete"));
+
+    expect(onDelete).toHaveBeenCalledTimes(1);
 });

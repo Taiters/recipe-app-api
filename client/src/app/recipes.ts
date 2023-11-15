@@ -65,4 +65,17 @@ const useUpdateRecipe = (): [(id: string, data: RecipeFormData) => Promise<Recip
     return [updateRecipe, requestInFlight];
 }
 
-export { useCreateRecipe, useRecipe, useRecipes, useUpdateRecipe };
+const useDeleteRecipe = (): [(id: string) => Promise<void>, boolean] => {
+    const api = useAuthenticatedAPI();
+    const [requestInFlight, setRequestInFlight] = useState(false);
+
+    const deleteRecipe = async (id: string) => {
+        setRequestInFlight(true);
+        await api.deleteRecipe(id);
+        setRequestInFlight(false);
+    }
+
+    return [deleteRecipe, requestInFlight];
+}
+
+export { useCreateRecipe, useDeleteRecipe, useRecipe, useRecipes, useUpdateRecipe };

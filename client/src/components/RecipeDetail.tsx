@@ -10,10 +10,12 @@ const Info = styled.p``
 
 type Props = {
     recipe: RecipeDetailModel,
+    onDelete: () => void,
 }
-const RecipeDetail = ({ recipe }: Props) => (
+const RecipeDetail = ({ recipe, onDelete }: Props) => (
     <Container data-testid={`recipe-detail-${recipe.id}`}>
         <Link to={`/recipes/${recipe.id}/edit`}>Edit</Link>
+        <button data-testid="delete" onClick={onDelete}>Delete</button>
         <Name data-testid="title">{recipe.title}</Name>
         {recipe.image && <Image data-testid="image" src={recipe.image} alt={recipe.title} />}
         <Description data-testid="description">{recipe.description}</Description>

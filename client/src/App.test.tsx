@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 import { useAuthenticatedUser, useAuthentication } from './app/auth';
-import { useCreateRecipe, useRecipe, useRecipes, useUpdateRecipe } from './app/recipes';
+import { useCreateRecipe, useDeleteRecipe, useRecipe, useRecipes, useUpdateRecipe } from './app/recipes';
 import { createRecipe } from './testUtils';
 
 jest.mock('./app/auth', () => ({
@@ -17,6 +17,7 @@ jest.mock('./app/recipes', () => ({
   useRecipes: jest.fn(),
   useCreateRecipe: jest.fn(),
   useUpdateRecipe: jest.fn(),
+  useDeleteRecipe: jest.fn(),
 }));
 
 
@@ -45,6 +46,7 @@ test('Recipe path loads and displays expected recipe', () => {
 
   setCurrentUser({ email: 'test@example.com', token: '1234' });
   (useRecipe as jest.Mock).mockReturnValue([recipe, false]);
+  (useDeleteRecipe as jest.Mock).mockReturnValue([Promise.resolve(), false]);
 
   render(
     <MemoryRouter initialEntries={["/recipes/123"]}>
@@ -81,6 +83,7 @@ test('Redirects to new recipe detail page after creation', async () => {
   setCurrentUser({ email: 'test@example.com', token: '1234' });
   (useCreateRecipe as jest.Mock).mockReturnValue([recipeCreator, false]);
   (useRecipe as jest.Mock).mockReturnValue([recipe, false]);
+  (useDeleteRecipe as jest.Mock).mockReturnValue([Promise.resolve(), false]);
 
   recipeCreator.mockReturnValue(Promise.resolve(recipe));
 
@@ -103,6 +106,7 @@ test('Redirects to modified recipe detail page after edit', async () => {
   setCurrentUser({ email: 'test@example.com', token: '1234' });
   (useUpdateRecipe as jest.Mock).mockReturnValue([recipeUpdater, false]);
   (useRecipe as jest.Mock).mockReturnValue([recipe, false]);
+  (useDeleteRecipe as jest.Mock).mockReturnValue([Promise.resolve(), false]);
 
   recipeUpdater.mockReturnValue(Promise.resolve(recipe));
 
@@ -120,4 +124,34 @@ test('Redirects to modified recipe detail page after edit', async () => {
   expect(recipeUpdater).toHaveBeenCalledWith('567', expect.anything());
   expect(screen.getByTestId("recipe-detail-567")).toBeInTheDocument();
   expect(screen.queryByTestId("recipe-form-567")).not.toBeInTheDocument();
+});
+
+test('Redirects to recipes list after deleting recipe', async () => {
+  const user = userEvent.setup();
+  const recipe1 = createRecipe({ id: '1', title: 'a test recipe' });
+  const recipe2 = createRecipe({ id: '2', title: 'another recipe' });
+  const recipe3 = createRecipe({ id: '3', title: 'another recipe' });
+
+  const recipeDeleter = jest.fn();
+  recipeDeleter.mockReturnValue(Promise.resolve());
+
+  setCurrentUser({ email: 'test@example.com', token: '1234' });
+  (useRecipe as jest.Mock).mockReturnValue([recipe2, false]);
+  (useRecipes as jest.Mock).mockReturnValue([[recipe1, recipe3], false]);
+  (useDeleteRecipe as jest.Mock).mockReturnValue([recipeDeleter, false]);
+
+  render(
+    <MemoryRouter initialEntries={["/recipes/2"]}>
+      <App />
+    </MemoryRouter>
+  )
+
+  expect(screen.getByTestId("recipe-detail-2")).toBeInTheDocument();
+
+  await user.click(screen.getByTestId("delete"));
+
+  expect(screen.queryByTestId("recipe-detail-2")).not.toBeInTheDocument();
+  expect(screen.getByTestId("recipe-list").childElementCount).toEqual(2);
+  expect(screen.getByTestId("recipe-1")).toBeInTheDocument();
+  expect(screen.getByTestId("recipe-3")).toBeInTheDocument();
 });
