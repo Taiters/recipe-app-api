@@ -1,7 +1,18 @@
 /**
  * Renders a list of attributes (ingredients / tags) in a recipe form.
  */
+import styled from "styled-components";
 import { RecipeAttribute } from "../app/models";
+import { Input as FormInput } from "./Form";
+
+const InputRow = styled.div`
+  display: flex;
+  margin-bottom: 1em;
+  gap: 0.5em;
+`;
+const Input = styled(FormInput)`
+  margin-bottom: 0;
+`;
 
 type Props = {
   attributeType: string;
@@ -29,8 +40,8 @@ function RecipeAttributeListForm({ attributeType, list, onChange }: Props) {
   return (
     <div>
       {list.map((item, i) => (
-        <div key={i}>
-          <input
+        <InputRow key={i}>
+          <Input
             data-testid={`${attributeType}-${i}`}
             type="text"
             value={item.name}
@@ -43,7 +54,7 @@ function RecipeAttributeListForm({ attributeType, list, onChange }: Props) {
           >
             Remove
           </button>
-        </div>
+        </InputRow>
       ))}
       <button
         type="button"

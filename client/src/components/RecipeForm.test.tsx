@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent, { UserEvent } from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import RecipeForm from "./RecipeForm";
 
 const INITIAL_RECIPE_DATA = {
@@ -36,7 +37,11 @@ test("Submitting form for a new recipe", async () => {
   };
   const onSubmit = jest.fn();
 
-  render(<RecipeForm onSubmit={onSubmit} />);
+  render(
+    <MemoryRouter>
+      <RecipeForm onSubmit={onSubmit} />
+    </MemoryRouter>,
+  );
 
   await populateField(user, "Title", recipeData.title);
   await populateField(user, "Description", recipeData.description);
@@ -53,7 +58,11 @@ test("Submitting form for an existing recipe", async () => {
   const newTitle = "New title";
   const onSubmit = jest.fn();
 
-  render(<RecipeForm onSubmit={onSubmit} recipe={INITIAL_RECIPE_DATA} />);
+  render(
+    <MemoryRouter>
+      <RecipeForm onSubmit={onSubmit} recipe={INITIAL_RECIPE_DATA} />
+    </MemoryRouter>,
+  );
 
   await populateField(user, "Title", newTitle);
 
@@ -73,7 +82,11 @@ test("Can edit ingredients in form", async () => {
   };
   const onSubmit = jest.fn();
 
-  render(<RecipeForm onSubmit={onSubmit} recipe={recipeData} />);
+  render(
+    <MemoryRouter>
+      <RecipeForm onSubmit={onSubmit} recipe={recipeData} />
+    </MemoryRouter>,
+  );
 
   await user.click(screen.getByTestId("add-ingredient"));
   await user.click(screen.getByTestId("ingredient-2"));
@@ -101,7 +114,11 @@ test("Can edit tags in form", async () => {
   };
   const onSubmit = jest.fn();
 
-  render(<RecipeForm onSubmit={onSubmit} recipe={recipeData} />);
+  render(
+    <MemoryRouter>
+      <RecipeForm onSubmit={onSubmit} recipe={recipeData} />
+    </MemoryRouter>,
+  );
 
   await user.click(screen.getByTestId("add-tag"));
   await user.click(screen.getByTestId("tag-2"));

@@ -4,6 +4,7 @@
  * to by each route.
  */
 import { Redirect, Route, Switch } from "react-router-dom";
+import styled from "styled-components";
 import {
   AuthContext,
   useAuthenticatedUser,
@@ -17,6 +18,10 @@ import RecipeEditController from "./components/RecipeEditController";
 import RecipeListController from "./components/RecipeListController";
 
 const LOGIN_PATH = "/login";
+const Container = styled.div`
+  margin: 0 auto;
+  max-width: 800px;
+`;
 
 function PrivateRoute({
   children,
@@ -35,28 +40,30 @@ function App() {
 
   return (
     <AuthContext.Provider value={currentUser}>
-      <Navigation onLogout={logout} />
-      <Switch>
-        <Route path={LOGIN_PATH}>
-          {currentUser == null ? (
-            <AuthForm onSubmit={login} />
-          ) : (
-            <Redirect to="/" />
-          )}
-        </Route>
-        <PrivateRoute path="/recipes/create">
-          <RecipeCreateController />
-        </PrivateRoute>
-        <PrivateRoute path="/recipes/:id/edit">
-          <RecipeEditController />
-        </PrivateRoute>
-        <PrivateRoute path="/recipes/:id">
-          <RecipeDetailController />
-        </PrivateRoute>
-        <PrivateRoute path="/">
-          <RecipeListController />
-        </PrivateRoute>
-      </Switch>
+      <Container>
+        <Navigation onLogout={logout} />
+        <Switch>
+          <Route path={LOGIN_PATH}>
+            {currentUser == null ? (
+              <AuthForm onSubmit={login} />
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
+          <PrivateRoute path="/recipes/create">
+            <RecipeCreateController />
+          </PrivateRoute>
+          <PrivateRoute path="/recipes/:id/edit">
+            <RecipeEditController />
+          </PrivateRoute>
+          <PrivateRoute path="/recipes/:id">
+            <RecipeDetailController />
+          </PrivateRoute>
+          <PrivateRoute path="/">
+            <RecipeListController />
+          </PrivateRoute>
+        </Switch>
+      </Container>
     </AuthContext.Provider>
   );
 }

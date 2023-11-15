@@ -3,12 +3,11 @@
  * (by passing a recipe property) or a new recipe.
  */
 import { useState } from "react";
-import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { RecipeFormData } from "../app/api";
 import { Ingredient, RecipeDetail, Tag } from "../app/models";
+import { Button, Fieldset, Input, Label, TextArea } from "./Form";
 import RecipeAttributeListForm from "./RecipeAttributeListForm";
-
-const FormField = styled.div``;
 
 type Props = {
   recipe?: RecipeDetail | null;
@@ -64,70 +63,57 @@ function RecipeForm({ recipe, onSubmit }: Props) {
       onSubmit={handleSubmit}
       data-testid={recipe ? `recipe-form-${recipe.id}` : "recipe-form"}
     >
-      <FormField>
-        <label htmlFor="title">Title</label>
-        <input
-          id="title"
-          type="text"
-          name="title"
-          value={recipeData.title}
-          onChange={setRecipeField}
+      {recipe && <Link to={`/recipes/${recipe.id}`}>&lt; Back</Link>}
+      <Label htmlFor="title">Title</Label>
+      <Input
+        id="title"
+        type="text"
+        name="title"
+        value={recipeData.title}
+        onChange={setRecipeField}
+      />
+      <Label htmlFor="description">Description</Label>
+      <TextArea
+        id="description"
+        name="description"
+        value={recipeData.description}
+        onChange={setRecipeField}
+      />
+      <Label htmlFor="time_minutes">Prep Time</Label>
+      <Input
+        id="time_minutes"
+        type="number"
+        name="time_minutes"
+        value={recipeData.time_minutes}
+        onChange={setRecipeField}
+      />
+      <Label htmlFor="price">Price</Label>
+      <Input
+        id="price"
+        type="number"
+        name="price"
+        value={recipeData.price}
+        onChange={setRecipeField}
+      />
+      <Fieldset>
+        <legend>Ingredients</legend>
+        <RecipeAttributeListForm
+          attributeType="ingredient"
+          list={recipeData.ingredients}
+          onChange={setIngredients}
         />
-      </FormField>
-      <FormField>
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          value={recipeData.description}
-          onChange={setRecipeField}
+      </Fieldset>
+      <Fieldset>
+        <legend>Tags</legend>
+        <RecipeAttributeListForm
+          attributeType="tag"
+          list={recipeData.tags}
+          onChange={setTags}
         />
-      </FormField>
-      <FormField>
-        <label htmlFor="time_minutes">Prep Time</label>
-        <input
-          id="time_minutes"
-          type="number"
-          name="time_minutes"
-          value={recipeData.time_minutes}
-          onChange={setRecipeField}
-        />
-        (minutes)
-      </FormField>
-      <FormField>
-        <label htmlFor="price">Price</label>
-        <input
-          id="price"
-          type="number"
-          name="price"
-          value={recipeData.price}
-          onChange={setRecipeField}
-        />
-        (minutes)
-      </FormField>
-      <FormField>
-        <fieldset>
-          <legend>Ingredients</legend>
-          <RecipeAttributeListForm
-            attributeType="ingredient"
-            list={recipeData.ingredients}
-            onChange={setIngredients}
-          />
-        </fieldset>
-      </FormField>
-      <FormField>
-        <fieldset>
-          <legend>Tags</legend>
-          <RecipeAttributeListForm
-            attributeType="tag"
-            list={recipeData.tags}
-            onChange={setTags}
-          />
-        </fieldset>
-      </FormField>
-      <button type="submit" data-testid="submit">
+      </Fieldset>
+      <Button type="submit" data-testid="submit">
         {recipe ? "Update" : "Create"}
-      </button>
+      </Button>
     </form>
   );
 }

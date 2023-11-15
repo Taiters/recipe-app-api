@@ -5,11 +5,14 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { RecipeDetail as RecipeDetailModel } from "../app/models";
 
-const Container = styled.div``;
-const Name = styled.h2``;
-const Image = styled.img``;
-const Description = styled.p``;
-const Info = styled.p``;
+const Delete = styled.button`
+  background-color: #ea4a4a;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.25em 1em;
+  border: none;
+  cursor: pointer;
+`;
 
 type Props = {
   recipe: RecipeDetailModel;
@@ -18,18 +21,15 @@ type Props = {
 
 function RecipeDetail({ recipe, onDelete }: Props) {
   return (
-    <Container data-testid={`recipe-detail-${recipe.id}`}>
+    <div data-testid={`recipe-detail-${recipe.id}`}>
       <Link to={`/recipes/${recipe.id}/edit`}>Edit</Link>
-      <button data-testid="delete" onClick={onDelete}>
-        Delete
-      </button>
-      <Name data-testid="title">{recipe.title}</Name>
+      <h2 data-testid="title">{recipe.title}</h2>
       {recipe.image && (
-        <Image data-testid="image" src={recipe.image} alt={recipe.title} />
+        <img data-testid="image" src={recipe.image} alt={recipe.title} />
       )}
-      <Description data-testid="description">{recipe.description}</Description>
-      <Info data-testid="time">Prep time: {recipe.time_minutes} minutes</Info>
-      <Info data-testid="price">£{recipe.price}</Info>
+      <p data-testid="description">{recipe.description}</p>
+      <p data-testid="time">Prep time: {recipe.time_minutes} minutes</p>
+      <p data-testid="price">£{recipe.price}</p>
       {recipe.ingredients.length > 0 && (
         <>
           <p>Ingredients</p>
@@ -50,7 +50,10 @@ function RecipeDetail({ recipe, onDelete }: Props) {
           </ol>
         </>
       )}
-    </Container>
+      <Delete data-testid="delete" onClick={onDelete}>
+        Delete
+      </Delete>
+    </div>
   );
 }
 

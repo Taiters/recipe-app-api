@@ -1,13 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
+import { MemoryRouter } from "react-router-dom";
 import { AuthContext } from "../app/auth";
 import Navigation from "./Navigation";
 
 test("Does not show logout button when user is not authenticated", () => {
   render(
     <AuthContext.Provider value={null}>
-      <Navigation onLogout={() => {}} />
+      <MemoryRouter>
+        <Navigation onLogout={() => {}} />
+      </MemoryRouter>
     </AuthContext.Provider>,
   );
 
@@ -24,7 +26,9 @@ test("Shows logout button and email when user is authenticated", async () => {
 
   render(
     <AuthContext.Provider value={authUser}>
-      <Navigation onLogout={logoutFn} />
+      <MemoryRouter>
+        <Navigation onLogout={logoutFn} />
+      </MemoryRouter>
     </AuthContext.Provider>,
   );
 

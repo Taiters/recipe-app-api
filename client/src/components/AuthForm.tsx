@@ -3,11 +3,15 @@
  */
 import { useState } from "react";
 import styled from "styled-components";
+import { Button, Input, Label } from "./Form";
 
-const Form = styled.form``;
-const Input = styled.input``;
-const Label = styled.label``;
-const Button = styled.button``;
+const Title = styled.h3`
+  text-align: center;
+`;
+const Form = styled.form`
+  width: 320px;
+  margin: 0 auto;
+`;
 
 type Props = {
   onSubmit: (email: string, password: string) => void;
@@ -24,6 +28,7 @@ function AuthForm({ onSubmit }: Props) {
 
   return (
     <Form onSubmit={handleSubmit} data-testid="auth-form">
+      <Title>Log in to continue</Title>
       <Label htmlFor="email">Email</Label>
       <Input
         id="email"
