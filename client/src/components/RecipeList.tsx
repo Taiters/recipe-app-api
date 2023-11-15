@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { Recipe } from "../app/models"
 import RecipeListItem from "./RecipeListItem"
 
@@ -7,9 +8,12 @@ type Props = {
 
 const RecipeList = ({ recipes }: Props) => {
     return (
-        <ul data-testid="recipe-list">
-            {recipes.map(r => <RecipeListItem key={r.id} recipe={r} />)}
-        </ul>
+        <div>
+            <Link to="/recipes/create">Add Recipe</Link>
+            <ul data-testid="recipe-list">
+                {recipes.map(r => <RecipeListItem key={r.id} recipe={r} />)}
+            </ul>
+        </div>
     )
 }
 
