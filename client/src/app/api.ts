@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAuthenticatedUser } from "./auth";
-import { RecipeDetail, User } from "./models";
+import { Recipe, RecipeDetail, User } from "./models";
 
 class RecipeAPI {
     token: string;
@@ -32,9 +32,9 @@ class RecipeAPI {
         return await response.json() as User;
     }
 
-    async recipes(): Promise<RecipeDetail[]> {
+    async recipes(): Promise<Recipe[]> {
         const response = await this.request("/api/recipe/recipes/");
-        return await response.json() as RecipeDetail[];
+        return await response.json() as Recipe[];
     }
 
     async recipe(id: string): Promise<RecipeDetail> {

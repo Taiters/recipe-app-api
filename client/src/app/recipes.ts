@@ -1,37 +1,37 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuthenticatedAPI } from "./api";
 import { Recipe, RecipeDetail } from "./models";
 
-const useRecipe = (id: string): [RecipeDetail | null, boolean] => {
-    const api = useAuthenticatedAPI();
+const useLoadableState = <T>(initialValue: T, loader: () => Promise<T>): [
+    T,
+    boolean,
+] => {
+    const [value, setValue] = useState(initialValue);
     const [isLoading, setIsLoading] = useState(true);
-    const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
 
     useEffect(() => {
-        setRecipe(null);
-        setIsLoading(true);
-        api.recipe(id).then(r => {
-            setRecipe(r);
+        setIsLoading(true)
+        loader().then(loadedValue => {
+            setValue(loadedValue);
             setIsLoading(false);
         });
-    }, [api, id]);
+    }, [loader]);
+
+    return [value, isLoading];
+}
+
+const useRecipe = (id: string): [RecipeDetail | null, boolean] => {
+    const api = useAuthenticatedAPI();
+    const loader = useCallback(() => api.recipe(id), [api, id]);
+    const [recipe, isLoading] = useLoadableState<RecipeDetail | null>(null, loader);
 
     return [recipe, isLoading];
 }
 
 const useRecipes = (): [Recipe[], boolean] => {
     const api = useAuthenticatedAPI();
-    const [isLoading, setIsLoading] = useState(true);
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-    useEffect(() => {
-        setRecipes([]);
-        setIsLoading(true);
-        api.recipes().then(r => {
-            setRecipes(r);
-            setIsLoading(false);
-        });
-    }, [api]);
+    const loader = useCallback(() => api.recipes(), [api]);
+    const [recipes, isLoading] = useLoadableState([], loader);
 
     return [recipes, isLoading];
 }
