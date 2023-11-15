@@ -3,7 +3,6 @@ export type User = {
 }
 
 export type RecipeAttribute = {
-    id: string,
     name: string,
 }
 export type Ingredient = RecipeAttribute;

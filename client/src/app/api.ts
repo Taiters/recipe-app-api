@@ -2,6 +2,10 @@ import { useMemo } from "react";
 import { useAuthenticatedUser } from "./auth";
 import { Recipe, RecipeDetail, User } from "./models";
 
+export type RecipeFormData =
+    Pick<RecipeDetail, 'title' | 'description' | 'time_minutes' | 'price' | 'ingredients' | 'tags'>
+    & { id?: string }
+
 class RecipeAPI {
     token: string;
 
@@ -39,6 +43,15 @@ class RecipeAPI {
 
     async recipe(id: string): Promise<RecipeDetail> {
         const response = await this.request(`/api/recipe/recipes/${id}/`)
+        return await response.json() as RecipeDetail;
+    }
+
+    async createRecipe(recipe: RecipeFormData): Promise<RecipeDetail> {
+        const response = await this.request(
+            `/api/recipe/recipes/`,
+            'POST',
+            JSON.stringify(recipe)
+        );
         return await response.json() as RecipeDetail;
     }
 

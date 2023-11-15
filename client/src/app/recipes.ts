@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAuthenticatedAPI } from "./api";
+import { RecipeFormData, useAuthenticatedAPI } from "./api";
 import { Recipe, RecipeDetail } from "./models";
 
 const useLoadableState = <T>(initialValue: T, loader: () => Promise<T>): [
@@ -36,4 +36,20 @@ const useRecipes = (): [Recipe[], boolean] => {
     return [recipes, isLoading];
 }
 
-export { useRecipe, useRecipes };
+const useCreateRecipe = (): [(data: RecipeFormData) => Promise<RecipeDetail>, boolean] => {
+    const api = useAuthenticatedAPI();
+    const [requestInFlight, setRequestInFlight] = useState(false);
+
+    const createRecipe = async (
+        recipe: RecipeFormData,
+    ) => {
+        setRequestInFlight(true);
+        const result = await api.createRecipe(recipe);
+        setRequestInFlight(false);
+        return result;
+    }
+
+    return [createRecipe, requestInFlight];
+}
+
+export { useCreateRecipe, useRecipe, useRecipes };

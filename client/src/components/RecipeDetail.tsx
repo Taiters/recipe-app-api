@@ -21,7 +21,7 @@ const RecipeDetail = ({ recipe }: Props) => (
             <>
                 <p>Ingredients</p>
                 <ol data-testid="ingredients">
-                    {recipe.ingredients.map(i => <li key={i.id}>{i.name}</li>)}
+                    {recipe.ingredients.map((ingredient, i) => <li key={i}>{ingredient.name}</li>)}
                 </ol>
             </>
         )}
@@ -29,7 +29,7 @@ const RecipeDetail = ({ recipe }: Props) => (
             <>
                 <p>Tags</p>
                 <ol data-testid="tags">
-                    {recipe.tags.map(t => <li key={t.id}>{t.name}</li>)}
+                    {recipe.tags.map((tag, i) => <li key={i}>{tag.name}</li>)}
                 </ol>
             </>
         )}

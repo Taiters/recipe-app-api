@@ -9,11 +9,11 @@ const createRecipe = (recipe: Partial<RecipeDetail> = {}): RecipeDetail => {
         time_minutes: 60,
         price: 5.10,
         tags: [
-            { id: '1', name: 'spicy' }
+            { name: 'spicy' }
         ],
         ingredients: [
-            { id: '1', name: 'chilly' },
-            { id: '2', name: 'pepper' },
+            { name: 'chilly' },
+            { name: 'pepper' },
         ],
         ...recipe,
     };
