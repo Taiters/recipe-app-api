@@ -4,9 +4,9 @@ import RecipeDetail from "./RecipeDetail";
 
 const RecipeDetailView = () => {
     const { id } = useParams<{ id: string }>();
-    const recipe = useRecipe(id);
+    const [recipe, isRecipeLoading] = useRecipe(id);
 
-    return recipe == null ? <p>Loading Recipe...</p> : <RecipeDetail recipe={recipe} />
+    return isRecipeLoading || recipe == null ? <p>Loading Recipe...</p> : <RecipeDetail recipe={recipe} />
 }
 
 export default RecipeDetailView;

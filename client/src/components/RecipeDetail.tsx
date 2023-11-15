@@ -11,10 +11,9 @@ type Props = {
     recipe: RecipeDetailModel,
 }
 const RecipeDetail = ({ recipe }: Props) => (
-    <Container data-testid={`recipe-${recipe.id}`}>
-        <Name data-testid="name">{recipe.name}</Name>
-        {recipe.image && <Image data-testid="image" src={recipe.image} alt={recipe.name} />}
-        ge
+    <Container data-testid={`recipe-detail-${recipe.id}`}>
+        <Name data-testid="title">{recipe.title}</Name>
+        {recipe.image && <Image data-testid="image" src={recipe.image} alt={recipe.title} />}
         <Description data-testid="description">{recipe.description}</Description>
         <Info data-testid="time">Prep time: {recipe.time_minutes} minutes</Info>
         <Info data-testid="price">£{recipe.price}</Info>

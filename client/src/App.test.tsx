@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 import { useAuthenticatedUser, useAuthentication } from './app/auth';
-import { useRecipe } from './app/recipes';
+import { useRecipe, useRecipes } from './app/recipes';
 import { createRecipe } from './testUtils';
 
 jest.mock('./app/auth', () => ({
@@ -13,6 +13,7 @@ jest.mock('./app/auth', () => ({
 
 jest.mock('./app/recipes', () => ({
   useRecipe: jest.fn(),
+  useRecipes: jest.fn(),
 }));
 
 
@@ -37,10 +38,10 @@ test('Shows auth form when user is not authenticated', () => {
 });
 
 test('Recipe path loads and displays expected recipe', () => {
-  const recipe = createRecipe({ id: '123', name: 'a test recipe' });
+  const recipe = createRecipe({ id: '123', title: 'a test recipe' });
 
   setCurrentUser({ email: 'test@example.com', token: '1234' });
-  (useRecipe as jest.Mock).mockReturnValue(recipe);
+  (useRecipe as jest.Mock).mockReturnValue([recipe, false]);
 
   render(
     <MemoryRouter initialEntries={["/recipes/123"]}>
@@ -48,5 +49,23 @@ test('Recipe path loads and displays expected recipe', () => {
     </MemoryRouter>
   )
 
-  expect(screen.getByTestId("recipe-123")).toHaveTextContent(recipe.name);
+  expect(screen.getByTestId("recipe-detail-123")).toHaveTextContent(recipe.title);
+});
+
+test('Recipes path loads and displays all recipes', () => {
+  const recipe1 = createRecipe({ id: '1', title: 'a test recipe' });
+  const recipe2 = createRecipe({ id: '2', title: 'another recipe' });
+
+  setCurrentUser({ email: 'test@example.com', token: '1234' });
+  (useRecipes as jest.Mock).mockReturnValue([[recipe1, recipe2], false]);
+
+  render(
+    <MemoryRouter initialEntries={["/recipes"]}>
+      <App />
+    </MemoryRouter>
+  )
+
+  expect(screen.getByTestId("recipe-list").childElementCount).toEqual(2);
+  expect(screen.getByTestId("recipe-1")).toHaveTextContent(recipe1.title);
+  expect(screen.getByTestId("recipe-2")).toHaveTextContent(recipe2.title);
 });

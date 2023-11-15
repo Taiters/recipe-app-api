@@ -10,7 +10,7 @@ test('Shows relevant recipe information', async () => {
     const tagsList = screen.getByTestId('tags');
     const ingredientsList = screen.getByTestId('ingredients');
 
-    expect(screen.getByTestId('name')).toHaveTextContent(recipe.name);
+    expect(screen.getByTestId('title')).toHaveTextContent(recipe.title);
     expect(screen.getByTestId('description')).toHaveTextContent(recipe.description);
     expect(screen.getByTestId('time')).toHaveTextContent(`${recipe.time_minutes} minutes`);
     expect(screen.getByTestId('price')).toHaveTextContent(`£${recipe.price}`);

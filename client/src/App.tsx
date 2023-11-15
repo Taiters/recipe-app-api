@@ -3,6 +3,7 @@ import { AuthContext, useAuthenticatedUser, useAuthentication } from "./app/auth
 import AuthForm from "./components/AuthForm";
 import Navigation from "./components/Navigation";
 import RecipeDetailView from "./components/RecipeDetailView";
+import RecipeListView from "./components/RecipeListView";
 
 const LOGIN_PATH = "/login";
 
@@ -32,6 +33,7 @@ const App = () => {
           <RecipeDetailView />
         </PrivateRoute>
         <PrivateRoute path="/">
+          <RecipeListView />
         </PrivateRoute>
       </Switch>
     </AuthContext.Provider>

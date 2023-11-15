@@ -9,13 +9,16 @@ export type RecipeAttribute = {
 export type Ingredient = RecipeAttribute;
 export type Tag = RecipeAttribute;
 
-export type RecipeDetail = {
+export type Recipe = {
     id: string,
-    name: string,
-    description: string,
-    image: string | null,
+    title: string,
     time_minutes: number
     price: number,
     ingredients: Ingredient[],
     tags: Tag[],
 }
+
+export type RecipeDetail = {
+    image: string | null,
+    description: string,
+} & Recipe;
