@@ -7,7 +7,7 @@ function createRecipe(recipe: Partial<RecipeDetail> = {}): RecipeDetail {
     title: "test recipe",
     description: "recipe 1234",
     time_minutes: 60,
-    price: 5.1,
+    price: 5.12,
 
     tags: [{ name: "spicy" }],
     ingredients: [{ name: "chilly" }, { name: "pepper" }],

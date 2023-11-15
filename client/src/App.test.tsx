@@ -7,6 +7,7 @@ import {
   useCreateRecipe,
   useDeleteRecipe,
   useRecipe,
+  useRecipeFormDataValidator,
   useRecipes,
   useUpdateRecipe,
 } from "./app/recipes";
@@ -24,6 +25,7 @@ jest.mock("./app/recipes", () => ({
   useCreateRecipe: jest.fn(),
   useUpdateRecipe: jest.fn(),
   useDeleteRecipe: jest.fn(),
+  useRecipeFormDataValidator: jest.fn(),
 }));
 
 function setCurrentUser(user: { email: string; token: string } | null) {
@@ -56,6 +58,7 @@ describe("When user is authenticated", () => {
   beforeEach(() => {
     setCurrentUser({ email: "test@example.com", token: "1234" });
     (useDeleteRecipe as jest.Mock).mockReturnValue([Promise.resolve(), false]);
+    (useRecipeFormDataValidator as jest.Mock).mockReturnValue([{}, () => ({})]);
   });
 
   test("Recipe path loads and displays expected recipe", () => {
@@ -107,7 +110,9 @@ describe("When user is authenticated", () => {
     );
 
     expect(screen.queryByTestId("recipe-detail-567")).not.toBeInTheDocument();
+
     await user.click(screen.getByTestId("submit"));
+
     expect(screen.getByTestId("recipe-detail-567")).toBeInTheDocument();
   });
 

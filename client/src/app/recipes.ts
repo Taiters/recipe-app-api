@@ -9,6 +9,10 @@ import { useCallback, useEffect, useState } from "react";
 import { RecipeFormData, useAuthenticatedAPI } from "./api";
 import { Recipe, RecipeDetail } from "./models";
 
+type RecipeFormValidationErrors = {
+  [K in keyof RecipeFormData]?: string;
+};
+
 /**
  * Allows loading of state (e.g. from API) asynchronously
  * via the provided loader, and returns a boolean which
@@ -102,10 +106,55 @@ function useDeleteRecipe(): [(id: string) => Promise<void>, boolean] {
   return [deleteRecipe, deletionInFlight];
 }
 
+function useRecipeFormDataValidator(): [
+  RecipeFormValidationErrors,
+  (recipeData: RecipeFormData) => RecipeFormValidationErrors,
+] {
+  const [validationErrors, setValidationErrors] =
+    useState<RecipeFormValidationErrors>({});
+
+  const validate = (recipeData: RecipeFormData): RecipeFormValidationErrors => {
+    const errors: RecipeFormValidationErrors = {};
+    if (recipeData.title.trim().length === 0) {
+      errors.title = "Title cannot be empty";
+    }
+
+    if (recipeData.description.trim().length === 0) {
+      errors.description = "Description cannot be empty";
+    }
+
+    if (!Number.isInteger(parseFloat(recipeData.time_minutes.toString()))) {
+      errors.time_minutes = "Prep time must be a valid integer";
+    } else if (recipeData.time_minutes < 0 || recipeData.time_minutes > 720) {
+      errors.time_minutes = "Prep time must be between 0 and 720 mintues";
+    }
+
+    if (!/^\d+(\.\d{2})?$/.test(recipeData.price.toString())) {
+      errors.price = "Price must be a whole number or have 2 decimal places";
+    } else if (recipeData.price < 0) {
+      errors.price = "Price cannot be negative";
+    }
+
+    if (recipeData.ingredients.find((i) => i.name.trim().length === 0)) {
+      errors.ingredients = "Ingredient names cannot be empty";
+    }
+
+    if (recipeData.tags.find((t) => t.name.trim().length === 0)) {
+      errors.tags = "Tag names cannot be empty";
+    }
+
+    setValidationErrors(errors);
+    return errors;
+  };
+
+  return [validationErrors, validate];
+}
+
 export {
   useCreateRecipe,
   useDeleteRecipe,
   useRecipe,
+  useRecipeFormDataValidator,
   useRecipes,
   useUpdateRecipe,
 };

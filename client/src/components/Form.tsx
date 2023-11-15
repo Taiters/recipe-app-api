@@ -4,7 +4,11 @@ const Input = styled.input`
   display: block;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 1em;
+`;
+const ErrorMsg = styled.p`
+  color: red;
+  padding: 0;
+  margin: 0 0 1em 0;
 `;
 
 const TextArea = styled.input`
@@ -12,11 +16,11 @@ const TextArea = styled.input`
   width: 100%;
   box-sizing: border-box;
   min-height: 5em;
-  margin-bottom: 1em;
 `;
 
 const Label = styled.label`
   display: block;
+  margin-top: 1em;
 `;
 
 const Button = styled.button`
@@ -30,4 +34,4 @@ const Fieldset = styled.fieldset`
   border: 1px solid #0008;
 `;
 
-export { Button, Fieldset, Input, Label, TextArea };
+export { Button, ErrorMsg, Fieldset, Input, Label, TextArea };

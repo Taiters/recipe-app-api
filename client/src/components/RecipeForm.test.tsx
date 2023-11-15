@@ -7,7 +7,7 @@ const INITIAL_RECIPE_DATA = {
   id: "12345",
   title: "Original title",
   description: "A description",
-  price: 43.2,
+  price: 43.32,
   time_minutes: 75,
   ingredients: [{ name: "pepper" }],
   tags: [{ name: "peppery" }],
@@ -30,7 +30,7 @@ test("Submitting form for a new recipe", async () => {
   const recipeData = {
     title: "Spicy something",
     description: "A description",
-    price: 43.2,
+    price: 43.32,
     time_minutes: 75,
     ingredients: [],
     tags: [],
