@@ -30,10 +30,12 @@ function useLoadableState<T>(
 
   useEffect(() => {
     setIsLoading(true);
-    loader().then((loadedValue) => {
-      setValue(loadedValue);
-      setIsLoading(false);
-    });
+    loader()
+      .then((loadedValue) => {
+        setValue(loadedValue);
+        setIsLoading(false);
+      })
+      .finally(() => setIsLoading(false));
   }, [loader]);
 
   return [value, isLoading];
@@ -53,9 +55,12 @@ function useInFlightCallback(): [
 
   const recordCallback = async <T>(callback: () => Promise<T>): Promise<T> => {
     setInFlight(true);
-    const result = await callback();
-    setInFlight(false);
-    return result;
+    try {
+      const result = await callback();
+      return result;
+    } finally {
+      setInFlight(false);
+    }
   };
 
   return [recordCallback, inFlight];
