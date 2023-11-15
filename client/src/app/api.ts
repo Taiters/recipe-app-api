@@ -3,8 +3,7 @@ import { useAuthenticatedUser } from "./auth";
 import { Recipe, RecipeDetail, User } from "./models";
 
 export type RecipeFormData =
-    Pick<RecipeDetail, 'title' | 'description' | 'time_minutes' | 'price' | 'ingredients' | 'tags'>
-    & { id?: string }
+    Pick<RecipeDetail, 'title' | 'description' | 'time_minutes' | 'price' | 'ingredients' | 'tags'>;
 
 class RecipeAPI {
     token: string;
@@ -48,9 +47,21 @@ class RecipeAPI {
 
     async createRecipe(recipe: RecipeFormData): Promise<RecipeDetail> {
         const response = await this.request(
-            `/api/recipe/recipes/`,
+            '/api/recipe/recipes/',
             'POST',
             JSON.stringify(recipe)
+        );
+        return await response.json() as RecipeDetail;
+    }
+
+    async updateRecipe(id: string, recipe: RecipeFormData): Promise<RecipeDetail> {
+        const response = await this.request(
+            `/api/recipe/recipes/${id}/`,
+            'PUT',
+            JSON.stringify({
+                ...recipe,
+                id,
+            }),
         );
         return await response.json() as RecipeDetail;
     }

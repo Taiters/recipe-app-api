@@ -48,7 +48,7 @@ const RecipeForm = ({ recipe, onSubmit }: Props) => {
     }))
 
     return (
-        <form onSubmit={handleSubmit} data-testid="recipe-form">
+        <form onSubmit={handleSubmit} data-testid={recipe ? `recipe-form-${recipe.id}` : 'recipe-form'}>
             <FormField>
                 <label htmlFor="title">Title</label>
                 <input id="title" type="text" name="title" value={recipeData.title} onChange={setRecipeField} />
@@ -79,7 +79,7 @@ const RecipeForm = ({ recipe, onSubmit }: Props) => {
                     <RecipeAttributeListForm attributeType="tag" list={recipeData.tags} onChange={setTags} />
                 </fieldset>
             </FormField>
-            <button type="submit" data-testid="submit">{recipeData.id ? "Update" : "Create"}</button>
+            <button type="submit" data-testid="submit">{recipe ? "Update" : "Create"}</button>
         </form>
     )
 }

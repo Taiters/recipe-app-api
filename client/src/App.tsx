@@ -4,6 +4,7 @@ import AuthForm from "./components/AuthForm";
 import Navigation from "./components/Navigation";
 import RecipeCreateController from "./components/RecipeCreateController";
 import RecipeDetailView from "./components/RecipeDetailView";
+import RecipeEditController from "./components/RecipeEditController";
 import RecipeListView from "./components/RecipeListView";
 
 const LOGIN_PATH = "/login";
@@ -32,6 +33,9 @@ const App = () => {
         </Route>
         <PrivateRoute path="/recipes/create">
           <RecipeCreateController />
+        </PrivateRoute>
+        <PrivateRoute path="/recipes/:id/edit">
+          <RecipeEditController />
         </PrivateRoute>
         <PrivateRoute path="/recipes/:id">
           <RecipeDetailView />

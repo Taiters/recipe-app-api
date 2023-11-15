@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 import { useAuthenticatedUser, useAuthentication } from './app/auth';
-import { useCreateRecipe, useRecipe, useRecipes } from './app/recipes';
+import { useCreateRecipe, useRecipe, useRecipes, useUpdateRecipe } from './app/recipes';
 import { createRecipe } from './testUtils';
 
 jest.mock('./app/auth', () => ({
@@ -16,6 +16,7 @@ jest.mock('./app/recipes', () => ({
   useRecipe: jest.fn(),
   useRecipes: jest.fn(),
   useCreateRecipe: jest.fn(),
+  useUpdateRecipe: jest.fn(),
 }));
 
 
@@ -92,4 +93,31 @@ test('Redirects to new recipe detail page after creation', async () => {
   expect(screen.queryByTestId("recipe-detail-567")).not.toBeInTheDocument();
   await user.click(screen.getByTestId("submit"));
   expect(screen.getByTestId("recipe-detail-567")).toBeInTheDocument();
+});
+
+test('Redirects to modified recipe detail page after edit', async () => {
+  const user = userEvent.setup();
+  const recipe = createRecipe({ id: '567' });
+  const recipeUpdater = jest.fn();
+
+  setCurrentUser({ email: 'test@example.com', token: '1234' });
+  (useUpdateRecipe as jest.Mock).mockReturnValue([recipeUpdater, false]);
+  (useRecipe as jest.Mock).mockReturnValue([recipe, false]);
+
+  recipeUpdater.mockReturnValue(Promise.resolve(recipe));
+
+  render(
+    <MemoryRouter initialEntries={["/recipes/567/edit"]}>
+      <App />
+    </MemoryRouter>
+  )
+
+  expect(screen.queryByTestId("recipe-detail-567")).not.toBeInTheDocument();
+  expect(screen.getByTestId("recipe-form-567")).toBeInTheDocument();
+
+  await user.click(screen.getByTestId("submit"));
+
+  expect(recipeUpdater).toHaveBeenCalledWith('567', expect.anything());
+  expect(screen.getByTestId("recipe-detail-567")).toBeInTheDocument();
+  expect(screen.queryByTestId("recipe-form-567")).not.toBeInTheDocument();
 });

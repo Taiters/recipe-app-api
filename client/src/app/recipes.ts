@@ -23,17 +23,13 @@ const useLoadableState = <T>(initialValue: T, loader: () => Promise<T>): [
 const useRecipe = (id: string): [RecipeDetail | null, boolean] => {
     const api = useAuthenticatedAPI();
     const loader = useCallback(() => api.recipe(id), [api, id]);
-    const [recipe, isLoading] = useLoadableState<RecipeDetail | null>(null, loader);
-
-    return [recipe, isLoading];
+    return useLoadableState<RecipeDetail | null>(null, loader);
 }
 
 const useRecipes = (): [Recipe[], boolean] => {
     const api = useAuthenticatedAPI();
     const loader = useCallback(() => api.recipes(), [api]);
-    const [recipes, isLoading] = useLoadableState([], loader);
-
-    return [recipes, isLoading];
+    return useLoadableState([], loader);
 }
 
 const useCreateRecipe = (): [(data: RecipeFormData) => Promise<RecipeDetail>, boolean] => {
@@ -52,4 +48,21 @@ const useCreateRecipe = (): [(data: RecipeFormData) => Promise<RecipeDetail>, bo
     return [createRecipe, requestInFlight];
 }
 
-export { useCreateRecipe, useRecipe, useRecipes };
+const useUpdateRecipe = (): [(id: string, data: RecipeFormData) => Promise<RecipeDetail>, boolean] => {
+    const api = useAuthenticatedAPI();
+    const [requestInFlight, setRequestInFlight] = useState(false);
+
+    const updateRecipe = async (
+        id: string,
+        recipe: RecipeFormData,
+    ) => {
+        setRequestInFlight(true);
+        const result = await api.updateRecipe(id, recipe);
+        setRequestInFlight(false);
+        return result;
+    }
+
+    return [updateRecipe, requestInFlight];
+}
+
+export { useCreateRecipe, useRecipe, useRecipes, useUpdateRecipe };

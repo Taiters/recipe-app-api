@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { RecipeDetail as RecipeDetailModel } from "../app/models";
 
@@ -12,6 +13,7 @@ type Props = {
 }
 const RecipeDetail = ({ recipe }: Props) => (
     <Container data-testid={`recipe-detail-${recipe.id}`}>
+        <Link to={`/recipes/${recipe.id}/edit`}>Edit</Link>
         <Name data-testid="title">{recipe.title}</Name>
         {recipe.image && <Image data-testid="image" src={recipe.image} alt={recipe.title} />}
         <Description data-testid="description">{recipe.description}</Description>
