@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { useAuthenticatedUser } from "./auth";
 import { RecipeDetail, User } from "./models";
 
 class RecipeAPI {
@@ -56,4 +58,13 @@ class RecipeAPI {
     }
 }
 
-export default RecipeAPI;
+const useAuthenticatedAPI = () => {
+    const currentUser = useAuthenticatedUser();
+    if (currentUser == null) {
+        throw new Error("useAuthenticatedAPI requires an authenticated user");
+    }
+
+    return useMemo(() => new RecipeAPI(currentUser.token), [currentUser.token]);
+}
+
+export { RecipeAPI, useAuthenticatedAPI };

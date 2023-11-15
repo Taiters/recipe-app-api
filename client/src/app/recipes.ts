@@ -1,18 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import RecipeAPI from "./api";
-import { useAuthenticatedUser } from "./auth";
+import { useEffect, useState } from "react";
+import { useAuthenticatedAPI } from "./api";
 import { Recipe, RecipeDetail } from "./models";
 
 const useRecipe = (id: string): [RecipeDetail | null, boolean] => {
-    const currentUser = useAuthenticatedUser();
+    const api = useAuthenticatedAPI();
     const [isLoading, setIsLoading] = useState(true);
-
-    if (currentUser == null) {
-        throw new Error("useRecipe requires an authenticated user");
-    }
-
     const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
-    const api = useMemo(() => new RecipeAPI(currentUser.token), [currentUser.token]);
 
     useEffect(() => {
         setRecipe(null);
@@ -27,15 +20,9 @@ const useRecipe = (id: string): [RecipeDetail | null, boolean] => {
 }
 
 const useRecipes = (): [Recipe[], boolean] => {
-    const currentUser = useAuthenticatedUser();
+    const api = useAuthenticatedAPI();
     const [isLoading, setIsLoading] = useState(true);
-
-    if (currentUser == null) {
-        throw new Error("useRecipes requires an authenticated user");
-    }
-
     const [recipes, setRecipes] = useState<Recipe[]>([]);
-    const api = useMemo(() => new RecipeAPI(currentUser.token), [currentUser.token]);
 
     useEffect(() => {
         setRecipes([]);

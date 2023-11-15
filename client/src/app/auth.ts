@@ -3,7 +3,7 @@
  * the Django app from the Udemy exercise, which uses Token authentication
  */
 import { createContext, useContext, useState } from "react";
-import RecipeAPI from "./api";
+import { RecipeAPI } from "./api";
 
 const STORAGE_KEY = 'authedUser';
 
