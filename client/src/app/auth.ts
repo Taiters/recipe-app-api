@@ -1,6 +1,11 @@
 /**
  * This isn't a prod ready / safe auth. Just getting something working with
- * the Django app from the Udemy exercise, which uses Token authentication
+ * the Django app from the Udemy exercise, which uses Token authentication.
+ *
+ * To log in, we POST to the token endpoint and store the returned token in
+ * session storage as well as the state.
+ *
+ * To log out, the token is deleted from session storage and state.
  */
 import { createContext, useContext, useState } from "react";
 import { RecipeAPI } from "./api";

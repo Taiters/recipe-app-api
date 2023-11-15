@@ -9,6 +9,14 @@ import { useCallback, useEffect, useState } from "react";
 import { RecipeFormData, useAuthenticatedAPI } from "./api";
 import { Recipe, RecipeDetail } from "./models";
 
+/**
+ * Allows loading of state (e.g. from API) asynchronously
+ * via the provided loader, and returns a boolean which
+ * monitors the loading state.
+ *
+ * @param initialValue - Initial state value
+ * @param loader - Async function which loads the state
+ */
 function useLoadableState<T>(
   initialValue: T,
   loader: () => Promise<T>,
@@ -25,6 +33,28 @@ function useLoadableState<T>(
   }, [loader]);
 
   return [value, isLoading];
+}
+
+/**
+ * Returns a callback and a boolean which is used to monitor
+ * when the callback is "in flight". For example, a call to an API
+ * would be "in flight" between the call to makeRequest and the API
+ * returning.
+ */
+function useInFlightCallback(): [
+  <T>(callback: () => Promise<T>) => Promise<T>,
+  boolean,
+] {
+  const [inFlight, setInFlight] = useState(false);
+
+  const recordCallback = async <T>(callback: () => Promise<T>): Promise<T> => {
+    setInFlight(true);
+    const result = await callback();
+    setInFlight(false);
+    return result;
+  };
+
+  return [recordCallback, inFlight];
 }
 
 function useRecipe(id: string): [RecipeDetail | null, boolean] {
@@ -44,16 +74,11 @@ function useCreateRecipe(): [
   boolean,
 ] {
   const api = useAuthenticatedAPI();
-  const [requestInFlight, setRequestInFlight] = useState(false);
+  const [recordCreate, creationInFlight] = useInFlightCallback();
+  const createRecipe = async (recipe: RecipeFormData) =>
+    await recordCreate(async () => await api.createRecipe(recipe));
 
-  const createRecipe = async (recipe: RecipeFormData) => {
-    setRequestInFlight(true);
-    const result = await api.createRecipe(recipe);
-    setRequestInFlight(false);
-    return result;
-  };
-
-  return [createRecipe, requestInFlight];
+  return [createRecipe, creationInFlight];
 }
 
 function useUpdateRecipe(): [
@@ -61,29 +86,20 @@ function useUpdateRecipe(): [
   boolean,
 ] {
   const api = useAuthenticatedAPI();
-  const [requestInFlight, setRequestInFlight] = useState(false);
+  const [recordUpdate, updateInFlight] = useInFlightCallback();
+  const updateRecipe = async (id: string, recipe: RecipeFormData) =>
+    await recordUpdate(async () => await api.updateRecipe(id, recipe));
 
-  const updateRecipe = async (id: string, recipe: RecipeFormData) => {
-    setRequestInFlight(true);
-    const result = await api.updateRecipe(id, recipe);
-    setRequestInFlight(false);
-    return result;
-  };
-
-  return [updateRecipe, requestInFlight];
+  return [updateRecipe, updateInFlight];
 }
 
 function useDeleteRecipe(): [(id: string) => Promise<void>, boolean] {
   const api = useAuthenticatedAPI();
-  const [requestInFlight, setRequestInFlight] = useState(false);
+  const [recordDelete, deletionInFlight] = useInFlightCallback();
+  const deleteRecipe = async (id: string) =>
+    await recordDelete(async () => await api.deleteRecipe(id));
 
-  const deleteRecipe = async (id: string) => {
-    setRequestInFlight(true);
-    await api.deleteRecipe(id);
-    setRequestInFlight(false);
-  };
-
-  return [deleteRecipe, requestInFlight];
+  return [deleteRecipe, deletionInFlight];
 }
 
 export {
