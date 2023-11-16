@@ -3,7 +3,7 @@
  */
 import { useState } from "react";
 import styled from "styled-components";
-import { Button, Input, Label } from "./Form";
+import { Button, ErrorMsg, Input, Label } from "./Form";
 
 const Title = styled.h3`
   text-align: center;
@@ -12,12 +12,16 @@ const Form = styled.form`
   width: 320px;
   margin: 0 auto;
 `;
+const ErrorMsgContainer = styled.div`
+  text-align: center;
+`;
 
 type Props = {
   onSubmit: (email: string, password: string) => void;
+  error?: string | null;
 };
 
-function AuthForm({ onSubmit }: Props) {
+function AuthForm({ onSubmit, error }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -48,6 +52,12 @@ function AuthForm({ onSubmit }: Props) {
       <Button type="submit" data-testid="submit">
         Log In
       </Button>
+
+      {error && (
+        <ErrorMsgContainer>
+          <ErrorMsg>{error}</ErrorMsg>
+        </ErrorMsgContainer>
+      )}
     </Form>
   );
 }

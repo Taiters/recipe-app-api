@@ -12,6 +12,15 @@ export type RecipeFormData = Pick<
   "title" | "description" | "time_minutes" | "price" | "ingredients" | "tags"
 >;
 
+class RecipeAPIError extends Error {
+  response: Response;
+
+  constructor(response: Response) {
+    super(response.statusText);
+    this.response = response;
+  }
+}
+
 class RecipeAPI {
   token: string;
 
@@ -85,6 +94,9 @@ class RecipeAPI {
         "Content-Type": "application/json",
       },
     });
+    if (response.status !== 200) {
+      throw new RecipeAPIError(response);
+    }
     const tokenData = await response.json();
     return tokenData["token"];
   }
@@ -99,4 +111,4 @@ function useAuthenticatedAPI() {
   return useMemo(() => new RecipeAPI(currentUser.token), [currentUser.token]);
 }
 
-export { RecipeAPI, useAuthenticatedAPI };
+export { RecipeAPI, RecipeAPIError, useAuthenticatedAPI };

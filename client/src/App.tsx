@@ -10,7 +10,7 @@ import {
   useAuthenticatedUser,
   useAuthentication,
 } from "./app/auth";
-import AuthForm from "./components/AuthForm";
+import AuthController from "./components/AuthController";
 import Navigation from "./components/Navigation";
 import RecipeCreateController from "./components/RecipeCreateController";
 import RecipeDetailController from "./components/RecipeDetailController";
@@ -44,11 +44,7 @@ function App() {
         <Navigation onLogout={logout} />
         <Switch>
           <Route path={LOGIN_PATH}>
-            {currentUser == null ? (
-              <AuthForm onSubmit={login} />
-            ) : (
-              <Redirect to="/" />
-            )}
+            <AuthController currentUser={currentUser} onLogin={login} />
           </Route>
           <PrivateRoute path="/recipes/create">
             <RecipeCreateController />
