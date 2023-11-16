@@ -1,0 +1,12 @@
+FROM node:20.9-alpine3.18
+LABEL maintainer="taiterstk"
+
+COPY ./client /client
+WORKDIR /client
+
+RUN npm install && \
+    adduser \
+        --disabled-password \
+        react-user
+
+USER react-user

@@ -23,6 +23,18 @@ services:
     depends_on:
       - db
 
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile-client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/client
+    depends_on:
+      - app
+    command: npm run start
+
   db:
     image: postgres:13-alpine
     volumes:
