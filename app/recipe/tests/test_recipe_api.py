@@ -188,7 +188,7 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_delete_other_users_recipe_error(self):
         """Test trying to delete another users recipe gives error."""
-        new_user = create_user(email="user2@example.com", password="testtest")
+        new_user = create_user(email="user2@example.com", password="testpass123")
         recipe = create_recipe(user=new_user)
 
         url = detail_url(recipe.id)
@@ -434,7 +434,7 @@ class ImageUploadTests(TestCase):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
             "user@example.com",
-            "password123",
+            "testpass123",
         )
         self.client.force_authenticate(self.user)
         self.recipe = create_recipe(user=self.user)
