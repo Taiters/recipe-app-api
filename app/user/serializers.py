@@ -2,6 +2,8 @@
 Serializers for the user API View.
 """
 from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 
@@ -29,10 +31,21 @@ class UserSerializer(serializers.ModelSerializer):
         user = super().update(instance, validated_data)
 
         if password:
+            # We validate the password through the validate_password method below. By the time
+            # it gets here, it has already been validated (This is also covered in a test)
+            # nosemgrep: python.django.security.audit.unvalidated-password.unvalidated-password
             user.set_password(password)
             user.save()
 
         return user
+
+    def validate_password(self, password):
+        """Validate the password, delegating to Django auth validator"""
+        try:
+            validate_password(password)
+            return password
+        except ValidationError as e:
+            raise serializers.ValidationError(str(e))
 
 
 class AuthTokenSerializer(serializers.Serializer):

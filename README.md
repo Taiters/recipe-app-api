@@ -1,11 +1,17 @@
 # Recipe ~~API~~ App Project
 
-## First time setup
+## Setup
 
 To install node dependencies run
 
 ```
 docker-compose run --rm client sh -c "npm install"
+```
+
+To recompile python's `requirements(.dev).txt` files
+
+```
+./compile_requirements.sh
 ```
 
 ## Running the project
