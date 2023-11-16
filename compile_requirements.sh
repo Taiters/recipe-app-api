@@ -19,4 +19,4 @@ docker run \
 
 docker run \
     --mount "source=${PWD},target=${MOUNT_PATH},type=bind" \
-    $IMAGE_NAME --verbose --no-emit-index-url requirements.dev.in
+    $IMAGE_NAME --verbose --no-emit-index-url requirements-dev.in
