@@ -1,0 +1,20 @@
+FROM python:3.9-alpine3.18
+LABEL maintainer="taiterstk"
+
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /opt/requirements
+
+RUN set -eux \
+    && apk add --no-cache \
+    build-base \
+    ca-certificates \
+    libffi-dev \
+    openssl-dev \
+    postgresql-dev \
+    yaml-dev \
+    rust \
+    && pip install --upgrade pip setuptools wheel pip-tools \
+    && rm -rf /root/.cache/pip
+
+ENTRYPOINT ["pip-compile"]
