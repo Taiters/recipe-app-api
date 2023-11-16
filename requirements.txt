@@ -27,7 +27,7 @@ jsonschema==4.19.2
     # via drf-spectacular
 jsonschema-specifications==2023.11.1
     # via jsonschema
-pillow==8.2.0
+pillow==10.0.1
     # via -r requirements.in
 psycopg2==2.8.6
     # via -r requirements.in
